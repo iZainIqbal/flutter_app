@@ -3,15 +3,24 @@ import 'package:go_router/go_router.dart';
 import '../widgets/gradient_app_bar.dart';
 import '../widgets/glassmorphic_container.dart';
 
-class ScreenA extends StatelessWidget {
+class ScreenA extends StatefulWidget {
   final bool congrats;
 
   const ScreenA({super.key, this.congrats = false});
 
   @override
-  Widget build(BuildContext context) {
+  State<ScreenA> createState() => _ScreenAState();
+}
+
+class _ScreenAState extends State<ScreenA> {
+  bool _hasShownDialog = false;
+
+  @override
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (congrats) {
+      if (widget.congrats && !_hasShownDialog) {
+        setState(() => _hasShownDialog = true);
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -35,10 +44,14 @@ class ScreenA extends StatelessWidget {
         );
       }
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: const GradientAppBar(title: 'Home'),
       body: Container(
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
